@@ -1,6 +1,6 @@
 # Operating baseline and traction intake
 
-Ask only the questions that change a decision. Product/business and finance owners submit facts in separate packs. The Agent, not either owner, classifies stage, Ansoff quadrant, and growth curve.
+Ask only the questions that change a decision. Product/business and finance owners submit facts in separate packs; `goal.md` supplies the approved SP/BP/budget targets and thresholds. The Agent, not either owner, classifies stage, Ansoff quadrant, and growth curve.
 
 ## Selection rule
 
@@ -50,6 +50,15 @@ For every answer require metric definition, baseline period/value, source, owner
 - What are conversion, return, defect, service-cost, recommendation, and trust baselines?
 - Which SKU/channel/market will be exited or deprioritized to fund the selected opportunities?
 - If multiple circles or series share a price band, what user/value boundary prevents cannibalization and which circle owns the result?
+
+### Smart hardware or AI hardware
+
+- What is the complete device-plus-AI-plus-service loop, and which user action or outcome proves value beyond shipment?
+- What are BOM, tooling, yield, certification, test, firmware/OTA, installation, warranty, return, service, inventory, and logistics baselines?
+- Which numbers are SI, SO, recognized revenue, gross margin, cash/collection, quality, trust, or service results? What converts a leading indicator into a result?
+- What are activation, adoption, model quality, failure/defect, privacy/security, recommendation, service-SLA, and incident-response baselines?
+- What cloud/model/API and human service costs attach to each device, and what is the full lifecycle contribution after warranty and returns?
+- Which device, price band, channel, lifecycle, or ecosystem boundaries are shared with another circle, and who owns the result?
 
 ### Commercial B2B
 

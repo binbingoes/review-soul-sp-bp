@@ -1,13 +1,13 @@
 ---
 name: review-soul-sp-bp
-description: "Review and self-check company, business-line, product-line, platform, or functional SP/BP plans against an approved SOUL decision kernel, adaptive operating baselines, SWOT/TOWS, Ansoff matrix, growth curves, Where to Play/How to Win, E0-E4 evidence maturity, financial quality, AI Native leverage, and staged-budget gates. Use when executives, circle leads, product owners, finance teams, or agents ask to 检查SP、检查BP、SPBP自检、战略评审、预算评审、经营指标基线、财务基线、SP牵引指标、业务规划体检、产品线规划复盘、职能规划评审、SOUL原则检查, or need a consistent human/agent verdict of 通过、验证、暂停、终止."
+description: "Review and self-check smart-hardware and AI-hardware company, business-line, product-line, platform, or functional SP/BP plans against an approved SOUL template plus goal.md, adaptive operating baselines, SWOT/TOWS, Ansoff matrix, growth curves, Where to Play/How to Win, E0-E4 evidence maturity, hardware economics, trust, AI Native leverage, and staged gates. Use when executives, circle leads, product owners, finance teams, or agents ask to 检查SP、检查BP、SPBP自检、智能硬件战略评审、AI硬件规划、硬件产品线审阅、跨圈组合审阅、预算评审、经营指标基线、财务基线、SP牵引指标、业务规划体检、产品线规划复盘、SOUL原则检查, or need a consistent human/agent verdict of 通过、验证、暂停、终止."
 ---
 
 # Review SOUL SP/BP
 
 ## Public distribution
 
-This repository is a public, company-agnostic implementation. It does not contain any organization’s private SOUL text, targets, tokens, document links, or current budget commitments. Supply the approved SOUL and finance/BP source for the organization under review; the bundled references are templates and must not be treated as live facts.
+This repository is a public, smart-hardware-focused implementation. It does not contain any organization’s private SOUL text, targets, tokens, document links, or current budget commitments. Supply the approved SOUL and the organization’s populated `goal.md`; the bundled SOUL and goal files are templates and must not be treated as live facts.
 
 Install from GitHub with:
 
@@ -16,6 +16,12 @@ npx skills add binbingoes/review-soul-sp-bp
 ```
 
 For a global install, add `-g`; to select the skill explicitly, add `--skill review-soul-sp-bp`.
+
+## Data boundary: SOUL versus goal.md
+
+- `references/soul-decision-kernel.md` contains only stable SOUL language and qualitative SP strategic pull. It must not be used as the source of BP periods, budget amounts, quotas, or current financial targets.
+- `goal.md` contains the time-sensitive quantitative layer: SP traction goals, BP results, budget lines, evidence thresholds, owners, release conditions, and stop conditions.
+- If SOUL and `goal.md` disagree, expose the conflict. Do not silently copy BP/budget data into SOUL or treat a goal as a timeless principle.
 
 ## Audience and review modes
 
@@ -27,15 +33,16 @@ Support three equivalent modes with the same evidence contract:
 
 The portable output must state source versions, coverage, review mode, confidence, verdict, unresolved gaps, and next decision authority. If an original source is unavailable, mark it `GAP`; do not imply full coverage.
 
-Turn an SP, BP, or budget draft into an evidence-based decision review. Apply hard gates before scoring so revenue ambition, presentation quality, or seniority cannot offset red lines, missing unique value, or an untraceable budget.
+Turn an SP, BP, or budget draft for a smart-hardware or AI-hardware business into an evidence-based decision review. Apply hard gates before scoring so revenue ambition, presentation quality, or seniority cannot offset red lines, missing unique value, or an untraceable goal/budget chain.
 
 ## Resource routing
 
-Read only what the review needs:
+Read only what the review needs, in this order:
 
-- Read [references/soul-decision-kernel.md](references/soul-decision-kernel.md) for SOUL principles, periods, evidence levels, and decision authority.
+- Read [references/soul-decision-kernel.md](references/soul-decision-kernel.md) for stable SOUL language, qualitative SP pull, hardware trust principles, and evidence vocabulary. It contains no BP/budget targets.
+- Read [goal.md](goal.md) for the approved SP/BP periods, quantitative goals, metric definitions, budget lines, evidence thresholds, owners, release conditions, and stop conditions. If it is missing or unpopulated, use preliminary mode.
 - Read [references/strategy-frameworks.md](references/strategy-frameworks.md) when analyzing SWOT/TOWS, Ansoff, growth curves, or Where to Play/How to Win.
-- Read [references/finance-pull.md](references/finance-pull.md) for the current internal financial and AI Native traction snapshot. Treat it as time-sensitive.
+- Read [references/finance-pull.md](references/finance-pull.md) for finance evidence intake questions and definitions. It is not a goal source.
 - Read [references/baseline-intake.md](references/baseline-intake.md) when the plan lacks operating metrics, comparable baselines, or causal targets. Select questions by business type, stage, Ansoff quadrant, and growth curve.
 - Read [references/review-rubric.md](references/review-rubric.md) before scoring or assigning a verdict.
 - Read [references/input-schema.md](references/input-schema.md) before running the deterministic scorer.
@@ -50,16 +57,16 @@ Identify:
 1. review scope: company, business line, product line, platform, or function;
 2. artifact type: SP, BP, budget, or combined pack;
 3. version, owner, decision body, and review date;
-4. planning periods: the SP cycle, BP cycle, and current budget period stated in the latest approved source pack;
-5. latest SOUL and finance/budget source.
+4. planning periods: the SP cycle, BP cycle, and current budget period stated in the approved `goal.md`;
+5. latest SOUL source and `goal.md` version.
 
 For a multi-circle or multi-channel review, also identify the **boundary pack**: circle/series ownership, user and scenario boundary, price band, channel role, shared capability, cannibalization rule, and the decision authority for overlap. A missing boundary pack is a strategic-choice gap, not a formatting issue.
 
 Use sources in this priority order:
 
 1. the latest explicit instruction from the user or decision owner;
-2. the latest live SOUL and finance/budget documents;
-3. the bundled dated snapshots;
+2. the latest approved SOUL and `goal.md`;
+3. the bundled templates;
 4. the plan under review.
 
 If versions conflict, expose the conflict. Do not silently choose an older target.
@@ -73,18 +80,19 @@ Label every important statement:
 
 If a live document is inaccessible, ask for an export or pasted text. Continue with available material, lower confidence, and keep missing content as `GAP`.
 
-Do not silently carry a current rule backward into an older plan. Record each source's effective period and revision before judging a historical plan.
+Do not silently carry a current rule backward into an older plan. Record SOUL revision and `goal.md` effective period/revision before judging a historical plan.
 
-### Step 2: Collect two evidence packs, then classify
+### Step 2: Collect evidence packs, then classify
 
 Do not ask the product/business owner or finance owner to choose a stage, Ansoff quadrant, or growth curve. Ask them for evidence in their own domain; the Agent makes the classification and shows its reasoning.
 
-Collect two separate packs:
+Collect three separate packs:
 
 1. **Product/business pack:** own historical performance; users and problems; product, channel, region, and price-band results; market change; competitor and alternative evidence; capabilities and constraints; proposed opportunities and explicit sacrifices.
 2. **Finance pack:** comparable revenue, gross profit/margin, operating profit, cash, inventory/collection, unit efficiency, investment, AI package/human package, definitions, sources, and forecast/budget baselines.
+3. **Goal pack:** populated `goal.md`, source version, SP/BP/budget periods, quantitative goals, metric definitions, thresholds, owners, and review dates.
 
-For a portfolio or cross-circle review, collect a third **boundary pack** containing:
+For a portfolio or cross-circle review, collect a fourth **boundary pack** containing:
 
 - who owns each product, customer, channel, price band, and result;
 - overlaps between circles or series and the proposed resolution;
@@ -112,11 +120,20 @@ For every requested metric require:
 
 Before calculating completion, reconcile the metric subject. At minimum distinguish circle revenue, regional/full-market revenue, sell-in/SI, sell-out/SO, recognized management revenue, operating profit, net profit variants, contribution margin, and cash. A shipment, order, or channel commitment is not a business result unless the plan defines how sell-out, collection, margin, quality, and trust are verified.
 
-Use `prior full-year actual / prior H2 actual / current H1 actual or forecast / current H2 budget` as the minimum current baseline pack. Use every approved SP and BP milestone in the source pack for future targets.
+Use the baseline periods and target milestones defined in `goal.md`; if they are absent, record `GAP` rather than inventing a cycle.
 
 If finance cannot provide a number, record `GAP`, owner, and due date. A plan with a critical missing baseline may receive a preliminary review, but cannot receive `通过`.
 
 🔴 **CHECKPOINT — baseline:** Before scoring financial quality, show the selected metric dimensions, definitions, baselines, and unresolved gaps to the plan owner or named finance authority. Do not infer a baseline from an aspirational target.
+
+### Smart-hardware focus
+
+For every device or AI-hardware opportunity, check the complete system rather than the device claim alone:
+
+- user scenario, device interaction, embedded model, cloud/service dependency, installation, and after-sales loop;
+- BOM, tooling, yield, test, certification, firmware/OTA, warranty, returns, inventory, logistics, and service economics;
+- activation, adoption, model quality, failure/defect, privacy/security, recommendation, trust, and service-SLA evidence;
+- channel price integrity, lifecycle, cannibalization, and one-owner-per-result rules.
 
 ### Step 3: Normalize the plan
 
@@ -131,8 +148,8 @@ Extract no more than three strategic opportunities or platform initiatives. For 
 - Where to Play, How to Win, and core control point;
 - E0-E4 evidence level;
 - SP and BP half-year milestones;
-- revenue, healthy gross margin, cash, trust, unit-efficiency, and capability assumptions;
-- current budget, release condition, stop condition, owner, and review date;
+- revenue or downstream value, healthy gross margin, cash, trust, unit-efficiency, hardware reliability, and capability assumptions;
+- SP/BP/budget goal references from `goal.md`, including release condition, stop condition, owner, and review date;
 - explicit choice and explicit sacrifice.
 
 Treat channel or customer requests as evidence inputs, not automatic priorities. For every request, record the requesting party, reachable user problem, incremental value, full-cost economics, strategic fit, and what the plan will not do. If a product/price/channel boundary overlaps another circle, create a conflict row and pause the affected strategic conclusion until the named authority resolves it.
@@ -159,7 +176,7 @@ Apply the override rules in [references/review-rubric.md](references/review-rubr
 
 Use the fixed chain:
 
-`SWOT/TOWS → Ansoff → growth curve → SOUL gates → E0-E4 → staged budget → review and reallocation`
+`SOUL SP pull → goal.md → SWOT/TOWS → Ansoff → growth curve → E0-E4 → staged gates → review and reallocation`
 
 Reject framework theater:
 
@@ -173,11 +190,11 @@ Reject framework theater:
 
 ### Step 6: Check SP, BP, and budget traceability
 
-For SP, require every half-year milestone in the approved cycle, target portfolio, growth-curve migration, required capabilities, choices, exits, and multi-year financial assumptions.
+For SP, require every milestone in `goal.md`, target portfolio, growth-curve migration, required capabilities, choices, exits, and multi-year assumptions.
 
-For BP, require every approved BP milestone, key actions, evidence upgrades, financial and trust metrics, resource ceilings, and correction against SP.
+For BP, require every BP milestone in `goal.md`, key actions, evidence upgrades, financial, hardware reliability, and trust metrics, resource ceilings, and correction against SP.
 
-For the current budget, require the evidence being purchased now. Do not approve irreversible investment before E3. Allocate third-curve work as a limited, time-boxed option until evidence supports expansion.
+For the current budget, require the line-level evidence purchase, amount, release condition, stop condition, owner, authority, and review date from `goal.md`. Do not approve irreversible investment before the goal file’s E3-equivalent gate. Allocate third-curve work as a limited, time-boxed option until evidence supports expansion.
 
 For low-price, ODM, or channel-specific plans, require a full-cost view: product cost, dedicated people, quality/testing, warranty/service, returns, inventory, collection, marketing, channel incentives, brand externality, and shared-capability cost. Do not approve a plan because a narrow marginal-contribution view is positive.
 
@@ -193,7 +210,7 @@ Do not force every unit to mechanically match company-level ratios. Require any 
 
 Choose review mode before scoring.
 
-Use **preliminary mode** if either evidence pack is missing/partial, a critical operating baseline is missing, any hard gate is `unknown`, or opportunity ownership/release/stop fields are incomplete. In preliminary mode:
+Use **preliminary mode** if the business/product, finance, or goal pack is missing/partial, a critical operating baseline is missing, any hard gate is `unknown`, or opportunity ownership/release/stop fields are incomplete. In preliminary mode:
 
 - do not output a numerical score or nine-dimension score table;
 - do not run the scorer with invented placeholder scores;
@@ -203,7 +220,7 @@ Use **preliminary mode** if either evidence pack is missing/partial, a critical 
 
 Use preliminary mode as well when a multi-circle review has no independent circle pack, when a source is inaccessible, or when definitions conflict. State which circle, metric, or decision is uncovered; do not imply full portfolio coverage.
 
-Use **formal mode** only when both evidence packs, comparable baselines, seven hard gates, opportunity cards, owners, and review dates are complete. Score the nine dimensions in [references/review-rubric.md](references/review-rubric.md), create the structured card in [references/input-schema.md](references/input-schema.md), and run the deterministic scorer.
+Use **formal mode** only when all three packs, comparable baselines, seven hard gates, opportunity cards, owners, and review dates are complete. Score the nine dimensions in [references/review-rubric.md](references/review-rubric.md), create the structured card in [references/input-schema.md](references/input-schema.md), and run the deterministic scorer.
 
 Run:
 
@@ -246,7 +263,7 @@ Scope red-line stops precisely. Stop real-data collection, user exposure, launch
 |---|---|---|
 | Source document cannot be read | Request export or pasted content; review visible sections | Mark unavailable sections `GAP`, lower confidence, and do not claim a full review |
 | Baseline numbers have conflicting definitions | Put definitions and sources side by side | Return `暂停` for the affected financial conclusion until the named finance authority fixes the baseline |
-| Finance has not produced the baseline | Ask the selected type/stage/quadrant questions and assign each gap an owner and date | Return a preliminary review only; cap the formal result at `暂停` |
+| Finance or goal file has not produced the baseline | Ask the selected hardware/type/stage/quadrant questions and assign each gap an owner and date | Return a preliminary review only; cap the formal result at `暂停` |
 | The plan has more than three opportunities | Ask the owner to rank and remove | Review the top three only and list the rest as explicit sacrifices or backlog |
 | A functional plan has no direct revenue | Switch to cycle, quality, reuse, adoption, downstream economics, and risk avoided | Pause only if it still cannot name a supported SP opportunity or measurable downstream result |
 | A target is unsupported but directionally useful | Label it `JUDGMENT` or `ASSUMPTION` | Convert it into a dated validation milestone; never present it as `FACT` |
@@ -281,6 +298,7 @@ Do not:
 Call the review complete only when:
 
 - source version, scope, owner, and periods are explicit;
+- the approved SOUL source and populated `goal.md` version are explicit;
 - business type, stage, quadrant/curve, metric definitions, baselines, sources, owners, and target periods are explicit;
 - no more than three opportunities or initiatives are reviewed;
 - all seven hard gates have evidence and a status;

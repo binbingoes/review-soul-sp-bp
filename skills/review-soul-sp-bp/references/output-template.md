@@ -7,7 +7,7 @@ Use when evidence is incomplete. Keep it short.
 1. **Decision:** verdict, confidence, `暂不评分（资料不完整）`, and one-sentence reason.
 2. **Hard gates:** show only failed/unknown gates and the exact risk.
 3. **Opportunity action:** for up to three opportunities show current evidence, allowed action, prohibited action, and next gate.
-4. **Two evidence packs:** list no more than six questions for product/business and six for finance; include conflicts.
+4. **Three evidence packs:** list no more than six questions for product/business, six for finance, and the missing `goal.md` fields; include conflicts.
 5. **Next decision:** required owner, authority, missing evidence, and review trigger. Use `GAP` for an absent date.
 
 For author self-checks, show `作者自评` and `独立审阅` side by side. For cross-circle reviews, add a boundary/conflict table:
@@ -44,11 +44,13 @@ Do not add the full weighted-score table, full evidence ledger, or repeated rest
 
 - Product/business pack owner, version, and status:
 - Finance pack owner, version, and status:
+- Goal pack (`goal.md`) owner, version, periods, and status:
+- Hardware profile: device scope / user scenario / device-AI-service loop / delivery stage / trust boundary:
 - Agent classification: business type / stage / primary constraint / Ansoff / curve:
 - Classification evidence and confidence:
 - Selected questions asked separately to each owner:
 
-| Metric | Definition | Baseline period/value | Source/owner | Target period/value | Gap/driver | Due date |
+| Metric subject | Result class | Definition | Baseline period/value | Source/owner | Target period/value | Gap/driver | Due date |
 |---|---|---|---|---|---|---|
 
 If inputs conflict:
@@ -73,14 +75,14 @@ For each of no more than three:
 - Where to Play / How to Win / control point:
 - SP milestone / BP milestone:
 - Financial and downstream-value assumptions:
-- Current budget / evidence purchased:
+- `goal.md` SP/BP goal and budget line / evidence purchased:
 - Release condition / stop condition:
 - Decision and rejected alternative:
 - Owner / authority / next review:
 
 ## 6. SP → BP → budget traceability
 
-| SP opportunity | SP half-year milestone | BP result/action | Current budget | Evidence bought | Next release | Stop |
+| SP opportunity | SP milestone | BP milestone/result | Goal budget line | Evidence bought | Next release | Stop |
 |---|---|---|---:|---|---|---|
 
 ## 7. Financial and AI Native pull
@@ -92,6 +94,8 @@ For each of no more than three:
 - Trust and delivery:
 - AI package / human package:
 - AI workflow adoption and measurable leverage:
+- Hardware economics: BOM / tooling / yield / certification / warranty / return / service / cloud-model cost:
+- Device trust: activation / adoption / failure / privacy-security / OTA / service SLA:
 
 ## 8. Revision actions
 
@@ -105,3 +109,5 @@ List only questions that require the named strategy, product, finance, delivery,
 ## 10. Evidence ledger
 
 Separate `FACT`, `JUDGMENT`, `ASSUMPTION`, and `GAP`. Do not blend them into one narrative.
+
+Every hard-gate `pass` must cite evidence IDs from the ledger. Free-text assertions do not establish a pass.

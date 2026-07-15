@@ -1,4 +1,4 @@
-# Strategy framework execution rules
+# Strategy framework execution rules for smart hardware and AI hardware
 
 Use frameworks to select and falsify choices, not to decorate a presentation.
 
@@ -80,3 +80,19 @@ Connect each opportunity to:
 - SP milestone, BP milestone, current budget, next gate, and stop condition.
 
 A growth target without a causal bridge from actions to revenue, margin, cash, and trust is an assumption, not a plan.
+
+## 6. Hardware system lens
+
+Apply the strategy frameworks to the full product system:
+
+`user scenario → device interaction → embedded intelligence → cloud/service → installation → after-sales → trust`
+
+For each selected opportunity, identify the bottleneck and control point across:
+
+- device differentiation, sensors/actuators, embedded model, and human override;
+- BOM, tooling, yield, certification, firmware/OTA, and production quality;
+- activation, adoption, model quality, failure/defect, privacy/security, and service SLA;
+- lifecycle economics: gross margin, cloud/model/API cost, warranty, returns, inventory, collection, and support;
+- channel price integrity, cannibalization, lifecycle ownership, and ecosystem dependency.
+
+Do not call a hardware strategy validated from shipment, channel commitment, demo quality, or model accuracy alone. Require the user outcome and the safe, reliable, economically viable closed loop.

@@ -48,6 +48,12 @@ VALID_BUSINESS_TYPES = {
     "odm",
     "platform_function",
     "company_portfolio",
+    "smart_hardware_product",
+    "ai_hardware_product",
+    "commercial_hardware",
+    "odm_hardware",
+    "hardware_platform_function",
+    "hardware_portfolio",
 }
 VALID_STAGES = {
     "survival",
@@ -60,6 +66,70 @@ VALID_STAGES = {
 VALID_PACK_STATUSES = {"complete", "partial", "missing"}
 VALID_REVIEW_MODES = {"self_check", "peer_review", "portfolio"}
 REQUIRED_PERIOD_KEYS = ("sp", "bp", "budget")
+VALID_METRIC_SUBJECTS = {
+    "recognized_revenue",
+    "sell_out",
+    "sell_in",
+    "bookings",
+    "backlog",
+    "gross_profit",
+    "gross_margin",
+    "operating_profit",
+    "net_profit",
+    "cash",
+    "collection",
+    "inventory",
+    "unit_efficiency",
+    "quality",
+    "trust",
+    "delivery",
+    "cycle_time",
+    "adoption",
+    "reuse",
+    "downstream_value",
+    "risk_avoided",
+    "capacity",
+    "ai_package_human_package",
+    "bom_cost",
+    "yield",
+    "warranty_return",
+    "service_sla",
+    "model_quality",
+    "ota_reliability",
+    "privacy_security",
+}
+VALID_RESULT_CLASSES = {
+    "business_result",
+    "economics",
+    "cash",
+    "trust_quality",
+    "cycle",
+    "adoption",
+    "downstream_value",
+    "capacity",
+    "risk",
+}
+LEADING_RESULT_SUBJECTS = {"sell_in", "bookings", "backlog"}
+REQUIRED_RESULT_CLASSES = {
+    "consumer_product": {"business_result", "economics", "cash", "trust_quality"},
+    "commercial_b2b": {"business_result", "economics", "cash", "trust_quality"},
+    "odm": {"business_result", "economics", "cash", "trust_quality"},
+    "company_portfolio": {"business_result", "economics", "cash", "trust_quality"},
+    "smart_hardware_product": {"business_result", "economics", "cash", "trust_quality"},
+    "ai_hardware_product": {"business_result", "economics", "cash", "trust_quality"},
+    "commercial_hardware": {"business_result", "economics", "cash", "trust_quality"},
+    "odm_hardware": {"business_result", "economics", "cash", "trust_quality"},
+    "hardware_portfolio": {"business_result", "economics", "cash", "trust_quality"},
+    "platform_function": {"cycle", "adoption", "downstream_value", "trust_quality"},
+    "hardware_platform_function": {"cycle", "adoption", "downstream_value", "trust_quality"},
+}
+REQUIRED_HARDWARE_PROFILE_FIELDS = (
+    "device_scope",
+    "user_scenario",
+    "device_ai_service_loop",
+    "manufacturing_or_delivery_stage",
+    "trust_safety_boundary",
+)
 VERDICT_ORDER = {"终止": 0, "暂停": 1, "验证": 2, "通过": 3}
 
 
@@ -93,7 +163,23 @@ def validate_and_score(data: dict[str, Any]) -> dict[str, Any]:
     if review_mode not in VALID_REVIEW_MODES:
         raise InputError("review_mode must be self_check, peer_review, or portfolio")
 
-    gate_rows: list[dict[str, str]] = []
+    findings: list[str] = []
+    critical_baseline_gap = False
+    gate_rows: list[dict[str, Any]] = []
+    evidence_ledger = data.get("evidence_ledger")
+    ledger_ids = set()
+    if isinstance(evidence_ledger, list):
+        ledger_ids = {
+            str(item.get("id")).strip()
+            for item in evidence_ledger
+            if isinstance(item, dict) and str(item.get("id", "")).strip()
+        }
+        if not ledger_ids:
+            critical_baseline_gap = True
+            findings.append("evidence_ledger must contain at least one identified source")
+    else:
+        critical_baseline_gap = True
+        findings.append("evidence_ledger is missing")
     for gate in GATES:
         item = gates.get(gate)
         if not isinstance(item, dict):
@@ -101,8 +187,21 @@ def validate_and_score(data: dict[str, Any]) -> dict[str, Any]:
         status = item.get("status")
         if status not in VALID_STATUSES:
             raise InputError(f"hard_gates.{gate}.status must be pass, fail, or unknown")
+        evidence_refs = item.get("evidence_refs", [])
+        if status == "pass":
+            if not isinstance(evidence_refs, list) or not evidence_refs:
+                critical_baseline_gap = True
+                findings.append(f"hard gate {gate}: evidence_refs are required for pass")
+            elif ledger_ids and any(str(ref).strip() not in ledger_ids for ref in evidence_refs):
+                critical_baseline_gap = True
+                findings.append(f"hard gate {gate}: an evidence_ref is not in evidence_ledger")
         gate_rows.append(
-            {"gate": gate, "status": status, "evidence": str(item.get("evidence", ""))}
+            {
+                "gate": gate,
+                "status": status,
+                "evidence": str(item.get("evidence", "")),
+                "evidence_refs": [str(ref) for ref in evidence_refs] if isinstance(evidence_refs, list) else [],
+            }
         )
 
     weighted_score = 0.0
@@ -122,8 +221,6 @@ def validate_and_score(data: dict[str, Any]) -> dict[str, Any]:
     # Avoid binary floating-point drift at exact rubric thresholds such as 80.0.
     weighted_score = round(weighted_score, 10)
 
-    findings: list[str] = []
-    critical_baseline_gap = False
     source_packs = data.get("source_packs")
     if not isinstance(source_packs, dict):
         critical_baseline_gap = True
@@ -147,6 +244,20 @@ def validate_and_score(data: dict[str, Any]) -> dict[str, Any]:
                 critical_baseline_gap = True
                 findings.append(f"source_packs.{pack_name}.{field} is missing")
 
+    goal_pack = data.get("goal_pack")
+    if not isinstance(goal_pack, dict):
+        critical_baseline_gap = True
+        findings.append("goal_pack is missing")
+        goal_pack = {}
+    else:
+        if goal_pack.get("status") != "complete":
+            critical_baseline_gap = True
+            findings.append("goal_pack is not complete")
+        for field in ("source", "owner", "as_of"):
+            if not str(goal_pack.get(field, "")).strip():
+                critical_baseline_gap = True
+                findings.append(f"goal_pack.{field} is missing")
+
     profile = data.get("business_profile")
     if not isinstance(profile, dict):
         critical_baseline_gap = True
@@ -166,8 +277,21 @@ def validate_and_score(data: dict[str, Any]) -> dict[str, Any]:
                 critical_baseline_gap = True
                 findings.append(f"business_profile.{field} is missing")
 
+    hardware_profile = data.get("hardware_profile")
+    if not isinstance(hardware_profile, dict):
+        critical_baseline_gap = True
+        findings.append("hardware_profile is missing")
+        hardware_profile = {}
+    else:
+        for field in REQUIRED_HARDWARE_PROFILE_FIELDS:
+            if not str(hardware_profile.get(field, "")).strip():
+                critical_baseline_gap = True
+                findings.append(f"hardware_profile.{field} is missing")
+
     baseline_metrics = data.get("baseline_metrics")
     baseline_count = 0
+    metric_subjects: set[str] = set()
+    result_classes: set[str] = set()
     if not isinstance(baseline_metrics, list) or not baseline_metrics:
         critical_baseline_gap = True
         findings.append("baseline_metrics must contain at least one operating baseline")
@@ -181,6 +305,8 @@ def validate_and_score(data: dict[str, Any]) -> dict[str, Any]:
         required_metric_fields = (
             "name",
             "definition",
+            "metric_subject",
+            "result_class",
             "baseline_period",
             "source",
             "owner",
@@ -204,6 +330,73 @@ def validate_and_score(data: dict[str, Any]) -> dict[str, Any]:
         if "target_value" not in metric or metric.get("target_value") is None:
             critical_baseline_gap = True
             findings.append(f"baseline metric {index}: target_value is missing")
+        subject = str(metric.get("metric_subject", "")).strip()
+        result_class = str(metric.get("result_class", "")).strip()
+        if subject and subject not in VALID_METRIC_SUBJECTS:
+            critical_baseline_gap = True
+            findings.append(f"baseline metric {index}: invalid metric_subject '{subject}'")
+        if result_class and result_class not in VALID_RESULT_CLASSES:
+            critical_baseline_gap = True
+            findings.append(f"baseline metric {index}: invalid result_class '{result_class}'")
+        if subject:
+            metric_subjects.add(subject)
+        if result_class:
+            result_classes.add(result_class)
+        if result_class == "business_result" and subject in LEADING_RESULT_SUBJECTS:
+            findings.append(
+                f"baseline metric {index}: {subject} is a leading indicator, not a verified business result"
+            )
+
+    business_type = profile.get("business_type", "")
+    required_classes = REQUIRED_RESULT_CLASSES.get(business_type, set())
+    missing_classes = sorted(required_classes - result_classes)
+    if missing_classes:
+        critical_baseline_gap = True
+        findings.append("baseline metric coverage missing: " + ", ".join(missing_classes))
+    if business_type in {
+        "consumer_product",
+        "commercial_b2b",
+        "odm",
+        "company_portfolio",
+        "smart_hardware_product",
+        "ai_hardware_product",
+        "commercial_hardware",
+        "odm_hardware",
+        "hardware_portfolio",
+    } and not ({"recognized_revenue", "sell_out"} & metric_subjects):
+        critical_baseline_gap = True
+        findings.append("baseline metric coverage missing: recognized_revenue or sell_out")
+    if business_type in {"platform_function", "hardware_platform_function"} and "downstream_value" not in metric_subjects:
+        critical_baseline_gap = True
+        findings.append("platform baseline metric coverage missing: downstream_value")
+
+    causal_bridges = data.get("causal_bridges")
+    causal_opportunities: set[str] = set()
+    if not isinstance(causal_bridges, list) or not causal_bridges:
+        critical_baseline_gap = True
+        findings.append("causal_bridges must contain at least one structured causal link")
+        causal_bridges = []
+    for index, bridge in enumerate(causal_bridges, start=1):
+        if not isinstance(bridge, dict):
+            critical_baseline_gap = True
+            findings.append(f"causal_bridges[{index - 1}] must be an object")
+            continue
+        required_bridge_fields = (
+            "opportunity",
+            "action",
+            "result_metric",
+            "baseline",
+            "target",
+            "owner",
+            "source",
+        )
+        missing = [field for field in required_bridge_fields if not str(bridge.get(field, "")).strip()]
+        if missing:
+            critical_baseline_gap = True
+            findings.append(f"causal bridge {index}: missing {', '.join(missing)}")
+        opportunity_name = str(bridge.get("opportunity", "")).strip()
+        if opportunity_name:
+            causal_opportunities.add(opportunity_name)
     boundary_pack = data.get("boundary_pack")
     boundary_gap = False
     if review_mode == "portfolio":
@@ -218,6 +411,79 @@ def validate_and_score(data: dict[str, Any]) -> dict[str, Any]:
                 if not str(boundary_pack.get(field, "")).strip():
                     boundary_gap = True
                     findings.append(f"boundary_pack.{field} is missing")
+            conflicts = boundary_pack.get("conflicts", [])
+            if not isinstance(conflicts, list):
+                boundary_gap = True
+                findings.append("boundary_pack.conflicts must be a list")
+                conflicts = []
+            for index, conflict in enumerate(conflicts, start=1):
+                if not isinstance(conflict, dict):
+                    boundary_gap = True
+                    findings.append(f"boundary conflict {index}: must be an object")
+                    continue
+                required_conflict_fields = ("type", "status", "owner", "resolver", "due_date", "result_impact")
+                missing = [field for field in required_conflict_fields if not str(conflict.get(field, "")).strip()]
+                if missing:
+                    boundary_gap = True
+                    findings.append(f"boundary conflict {index}: missing {', '.join(missing)}")
+                status = str(conflict.get("status", "")).strip().lower()
+                if status not in {"resolved", "closed", "accepted"}:
+                    boundary_gap = True
+                    findings.append(f"boundary conflict {index}: unresolved")
+        circle_packs = data.get("circle_packs")
+        if not isinstance(circle_packs, list) or len(circle_packs) < 2:
+            boundary_gap = True
+            findings.append("circle_packs must contain at least two independent circle packs in portfolio mode")
+        else:
+            for index, circle_pack in enumerate(circle_packs, start=1):
+                if not isinstance(circle_pack, dict):
+                    boundary_gap = True
+                    findings.append(f"circle_packs[{index - 1}] must be an object")
+                    continue
+                for field in ("scope_name", "status", "owner", "as_of"):
+                    if not str(circle_pack.get(field, "")).strip():
+                        boundary_gap = True
+                        findings.append(f"circle_packs[{index}].{field} is missing")
+                if circle_pack.get("status") != "complete":
+                    boundary_gap = True
+                    findings.append(f"circle_packs[{index}] is not complete")
+    critical_opportunity_gap = False
+    budget_lines = data.get("budget_lines")
+    budget_line_names: set[str] = set()
+    if not isinstance(budget_lines, list) or not budget_lines:
+        critical_opportunity_gap = True
+        findings.append("budget_lines must contain at least one row from goal.md")
+        budget_lines = []
+    for index, line in enumerate(budget_lines, start=1):
+        if not isinstance(line, dict):
+            critical_opportunity_gap = True
+            findings.append(f"budget_lines[{index - 1}] must be an object")
+            continue
+        required_budget_fields = (
+            "budget_line",
+            "sp_opportunity",
+            "bp_milestone",
+            "budget_period",
+            "amount",
+            "currency",
+            "evidence_purchase",
+            "release_condition",
+            "stop_condition",
+            "owner",
+            "authority",
+            "review_date",
+        )
+        missing = [field for field in required_budget_fields if line.get(field) is None or not str(line.get(field, "")).strip()]
+        if missing:
+            critical_opportunity_gap = True
+            findings.append(f"budget line {index}: missing {', '.join(missing)}")
+        amount = line.get("amount")
+        if not isinstance(amount, (int, float)) or amount < 0:
+            critical_opportunity_gap = True
+            findings.append(f"budget line {index}: amount must be a non-negative number")
+        opportunity_name = str(line.get("sp_opportunity", "")).strip()
+        if opportunity_name:
+            budget_line_names.add(opportunity_name)
     # Periods are organization-specific. Validate presence, but never impose
     # a private company's dates on a public skill distribution.
     period_mismatch = False
@@ -229,7 +495,6 @@ def validate_and_score(data: dict[str, Any]) -> dict[str, Any]:
 
     opportunity_rows: list[dict[str, Any]] = []
     has_early_evidence = False
-    critical_opportunity_gap = False
     irreversible_before_e3 = False
     for index, opportunity in enumerate(opportunities, start=1):
         if not isinstance(opportunity, dict):
@@ -282,6 +547,20 @@ def validate_and_score(data: dict[str, Any]) -> dict[str, Any]:
             }
         )
 
+    opportunity_names = {row["name"] for row in opportunity_rows}
+    missing_causal = sorted(opportunity_names - causal_opportunities)
+    if missing_causal:
+        critical_baseline_gap = True
+        findings.append("causal bridge missing for: " + ", ".join(missing_causal))
+    missing_budget = sorted(opportunity_names - budget_line_names)
+    if missing_budget:
+        critical_opportunity_gap = True
+        findings.append("budget line missing for: " + ", ".join(missing_budget))
+    unknown_budget_opportunities = sorted(budget_line_names - opportunity_names)
+    if unknown_budget_opportunities:
+        critical_opportunity_gap = True
+        findings.append("budget line references unknown opportunity: " + ", ".join(unknown_budget_opportunities))
+
     failed_terminate = [row["gate"] for row in gate_rows if row["status"] == "fail" and row["gate"] in TERMINATE_GATES]
     failed_pause = [row["gate"] for row in gate_rows if row["status"] == "fail" and row["gate"] not in TERMINATE_GATES]
     unknown = [row["gate"] for row in gate_rows if row["status"] == "unknown"]
@@ -329,9 +608,14 @@ def validate_and_score(data: dict[str, Any]) -> dict[str, Any]:
         "owner": data.get("owner", ""),
         "review_mode": review_mode,
         "source_packs": source_packs,
+        "goal_pack": goal_pack,
         "boundary_pack": boundary_pack,
         "business_profile": profile,
+        "hardware_profile": hardware_profile,
         "baseline_metric_count": baseline_count,
+        "budget_line_count": len(budget_lines),
+        "metric_subjects": sorted(metric_subjects),
+        "result_classes": sorted(result_classes),
         "verdict": verdict,
         "score_valid": score_valid,
         "weighted_score": round(weighted_score, 1) if score_valid else None,
@@ -354,6 +638,7 @@ def markdown_report(result: dict[str, Any]) -> str:
         f"- Business type: {result['business_profile'].get('business_type', '')}",
         f"- Stage: {result['business_profile'].get('stage', '')}",
         f"- Baseline metrics: {result['baseline_metric_count']}",
+        f"- Budget lines: {result['budget_line_count']}",
         f"- Verdict: **{result['verdict']}**",
         (
             f"- Weighted score: **{result['weighted_score']}/100**"

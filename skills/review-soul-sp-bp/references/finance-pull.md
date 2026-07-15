@@ -1,6 +1,6 @@
-# Finance and AI Native traction template
+# Finance evidence intake template
 
-This public file is a configurable finance pull, not a company forecast. It contains no internal target, document link, token, or current-period deadline. Replace the placeholders with the latest approved finance/BP requirements for the organization under review. If the approved finance source is unavailable, mark the affected fields `GAP` and stay in preliminary mode.
+This public file is a configurable finance evidence intake, not a company forecast or goal source. It contains no internal target, document link, token, or current-period deadline. Use `goal.md` for approved SP/BP/budget targets and thresholds; use this file only to ask for comparable facts and definitions. If the approved finance source is unavailable, mark the affected fields `GAP` and stay in preliminary mode.
 
 ## Minimum baseline pack
 

@@ -1,6 +1,6 @@
 # Review rubric
 
-Hard gates override the weighted score.
+Hard gates override the weighted score. `SOUL` supplies qualitative SP direction; `goal.md` supplies quantitative SP/BP/budget targets and gates. Do not score without a complete goal pack.
 
 ## Seven hard gates
 
@@ -18,13 +18,15 @@ Use `pass`, `fail`, or `unknown` and cite evidence.
 
 An early opportunity may pass the `evidence` gate at E0-E2 if its uncertainty is honestly labeled and the requested action is only a bounded validation. It cannot receive full or irreversible budget.
 
-Baseline integrity is a mandatory sub-gate of `evidence` and `commercial_closure`. A formal approval cannot receive `通过` when critical metric definitions, comparable baselines, sources, or owners remain missing.
+Baseline integrity is a mandatory sub-gate of `evidence` and `commercial_closure`. A formal approval cannot receive `通过` when critical metric subjects, result classes, comparable baselines, sources, or owners remain missing. SI, bookings, and backlog are leading indicators, not sufficient business results.
+
+For smart-hardware and AI-hardware plans, formal coverage must include the device/service system, lifecycle economics, reliability/trust, and the applicable activation/adoption or model-quality evidence. A device shipment target without SO/recognized-result, margin, cash, quality, and service evidence is incomplete.
 
 For low-price, ODM, or channel-specific plans, commercial closure requires full-cost economics: dedicated people, quality/testing, warranty/service, returns, inventory, collection, marketing, incentives, brand externality, and shared-capability cost. A positive narrow marginal contribution does not pass the gate.
 
 ## Weighted score
 
-Do not use this section in preliminary mode. A numerical score is valid only when both source packs are complete, critical baselines are present, no hard gate is `unknown`, and opportunity ownership/release/stop fields are complete. Otherwise output `暂不评分（资料不完整）`.
+Do not use this section in preliminary mode. A numerical score is valid only when business/product, finance, and goal packs are complete, critical baselines are present, no hard gate is `unknown`, evidence refs resolve to the ledger, causal bridges and line-level budget rows are complete, and opportunity ownership/release/stop fields are complete. Otherwise output `暂不评分（资料不完整）`.
 
 Score each dimension from 0 to 10.
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "智能硬件 SOUL SP/BP 自检"
+  short_description: "审阅智能硬件/AI硬件 SP/BP，核对 SOUL、goal.md、经营口径、跨圈边界与阶段门"
+  default_prompt: "Use $review-soul-sp-bp to self-check or peer-review this smart-hardware or AI-hardware SP/BP, read the approved SOUL and goal.md separately, reconcile operating definitions and portfolio boundaries, and return hard-gate findings, evidence gaps, staged actions, and revision-ready advice."
