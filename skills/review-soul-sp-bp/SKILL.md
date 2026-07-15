@@ -7,7 +7,7 @@ description: "Review and self-check smart-hardware and AI-hardware company, busi
 
 ## Public distribution
 
-This repository is a public, smart-hardware-focused implementation. It does not contain any organization’s private SOUL text, targets, tokens, document links, or current budget commitments. Supply the approved SOUL and the organization’s populated `goal.md`; the bundled SOUL and goal files are templates and must not be treated as live facts.
+This package is a smart-hardware-focused implementation. The public distribution contains templates; a private deployment may supply an approved organization SOUL and populated `goal.md`. Never treat bundled templates as live facts, and never infer private targets or thresholds that are not present in the supplied source.
 
 Install from GitHub with:
 
