@@ -1,0 +1,22 @@
+[
+  {
+    "id": "business-sp-bp",
+    "prompt": "Use $review-soul-sp-bp to review a growth-stage consumer business SP/BP draft with three opportunities: an existing product entering a new overseas market at E2, a new SKU for an established domestic channel at E1, and an AI-enabled service experiment at E0. The draft requests full tooling and launch budget for all three, gives revenue targets but no comparable operating baselines, gross-margin bridge, or stop conditions. Return a decision-ready review without inventing missing data.",
+    "expected": "Use preliminary mode with no numerical score; request separate business/product and finance evidence packs; infer only evidence-supported stage/Ansoff/curve labels; reject full irreversible budget below E3; and return 验证 or 暂停 with concise revision actions."
+  },
+  {
+    "id": "platform-ai-plan",
+    "prompt": "Use $review-soul-sp-bp to review a transformation-stage platform AI BP that has no direct revenue target but claims it will shorten delivery time. It includes a pilot in two business units, baseline cycle time, quality target, reuse target, adoption target, downstream gross-profit estimate, a current-period validation budget, and a stop date. Decide whether the absence of direct revenue is a defect, identify any missing platform baseline questions, and show the next evidence gate.",
+    "expected": "Do not penalize the platform for lacking direct revenue; use preliminary mode without a numerical score; separate platform-owner facts from finance attribution data; evaluate cycle, quality, reuse, adoption, downstream economics and risk; and issue a concise staged verdict."
+  },
+  {
+    "id": "redline-and-framework-theater",
+    "prompt": "Use $review-soul-sp-bp to review a polished BP containing six priorities grouped under three themes. Its SWOT has no sources, Where to Play names every customer, growth depends on deep discounts, the plan omits cash and trust metrics, and one feature collects family data without a clear authorization boundary. Senior leadership has already sponsored it. Produce the formal self-check result.",
+    "expected": "Treat the privacy issue as a non-tradable red line, ignore sponsorship as evidence, expose six priorities and framework theater, output no numerical score because source packs are missing, precisely stop real-data/user-risk actions, and return 终止当前版本 with named authority and concise corrective actions."
+  },
+  {
+    "id": "cross-circle-boundary-and-channel-demand",
+    "prompt": "Use $review-soul-sp-bp to review two circle SP/BP materials from the same product-GTM meeting. Circle A claims the premium series must remain above a stated price floor, Circle B proposes an overlapping price band, and channels request several exclusive low-price SKUs. The pack mixes market data definitions, has no independent finance pack for Circle A, and treats shipment targets as revenue. Return a portfolio pre-review without inventing data.",
+    "expected": "Keep the two circles as separate scopes before portfolio reconciliation; flag the unresolved price/ownership overlap, distinguish channel requests from strategy, expose revenue/SI/SO and market-data conflicts, stay in preliminary mode with no numeric score, and require full-cost economics, E3 gates, owners, and an explicit authority/date for boundary resolution."
+  }
+]

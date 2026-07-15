@@ -1,0 +1,4 @@
+interface:
+  display_name: "SOUL SP/BP 自检"
+  short_description: "自检或互评 SP/BP，核对经营基线、跨圈边界、预算门与止损条件"
+  default_prompt: "Use $review-soul-sp-bp to self-check or peer-review this SP/BP, reconcile operating definitions and portfolio boundaries, and return hard-gate findings, evidence gaps, staged budget actions, and revision-ready advice."
