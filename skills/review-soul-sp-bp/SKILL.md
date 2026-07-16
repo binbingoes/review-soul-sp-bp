@@ -19,6 +19,7 @@ For a global install, add `-g`; to select the skill explicitly, add `--skill rev
 
 ## Data boundary: SOUL versus goal.md
 
+- The user-supplied `soul.md` and `goal.md` are the review’s primary configuration; bundled files are templates only.
 - `references/soul-decision-kernel.md` contains only stable SOUL language and qualitative SP strategic pull. It must not be used as the source of BP periods, budget amounts, quotas, or current financial targets.
 - `goal.md` contains the time-sensitive quantitative layer: SP traction goals, BP results, budget lines, evidence thresholds, owners, release conditions, and stop conditions.
 - If SOUL and `goal.md` disagree, expose the conflict. Do not silently copy BP/budget data into SOUL or treat a goal as a timeless principle.
@@ -37,10 +38,21 @@ Turn an SP, BP, or budget draft for a smart-hardware or AI-hardware business int
 
 ## Resource routing
 
+### Required user inputs
+
+At the start of every review, look for the user-supplied configuration files in the current review directory:
+
+1. `./soul.md` — the organization or business SOUL and SP strategic pull;
+2. `./goal.md` — the organization or business SP/BP/budget goals and quantitative gates.
+
+If the files are not named exactly this way, ask the user for their paths or use paths explicitly provided in the prompt. Do not silently substitute the bundled templates for a formal review. If either file cannot be read, mark the related pack `GAP` and stay in preliminary mode.
+
 Read only what the review needs, in this order:
 
-- Read [references/soul-decision-kernel.md](references/soul-decision-kernel.md) for stable SOUL language, qualitative SP pull, hardware trust principles, and evidence vocabulary. It contains no BP/budget targets.
-- Read [goal.md](goal.md) for the approved SP/BP periods, quantitative goals, metric definitions, budget lines, evidence thresholds, owners, release conditions, and stop conditions. If it is missing or unpopulated, use preliminary mode.
+1. Read the user-supplied `soul.md` for stable SOUL language and qualitative SP pull.
+2. Read the user-supplied `goal.md` for approved SP/BP periods, quantitative goals, metric definitions, budget lines, evidence thresholds, owners, release conditions, and stop conditions.
+3. Read [references/soul-decision-kernel.md](references/soul-decision-kernel.md) only as a smart-hardware reference or fallback template; it contains no company-specific targets.
+4. Read [goal.md](goal.md) only as a schema/example reference; never treat it as live organizational data.
 - Read [references/strategy-frameworks.md](references/strategy-frameworks.md) when analyzing SWOT/TOWS, Ansoff, growth curves, or Where to Play/How to Win.
 - Read [references/finance-pull.md](references/finance-pull.md) for finance evidence intake questions and definitions. It is not a goal source.
 - Read [references/baseline-intake.md](references/baseline-intake.md) when the plan lacks operating metrics, comparable baselines, or causal targets. Select questions by business type, stage, Ansoff quadrant, and growth curve.
@@ -57,15 +69,15 @@ Identify:
 1. review scope: company, business line, product line, platform, or function;
 2. artifact type: SP, BP, budget, or combined pack;
 3. version, owner, decision body, and review date;
-4. planning periods: the SP cycle, BP cycle, and current budget period stated in the approved `goal.md`;
-5. latest SOUL source and `goal.md` version.
+4. planning periods: the SP cycle, BP cycle, and current budget period stated in the user-supplied `goal.md`;
+5. user-supplied SOUL revision and `goal.md` version.
 
 For a multi-circle or multi-channel review, also identify the **boundary pack**: circle/series ownership, user and scenario boundary, price band, channel role, shared capability, cannibalization rule, and the decision authority for overlap. A missing boundary pack is a strategic-choice gap, not a formatting issue.
 
 Use sources in this priority order:
 
 1. the latest explicit instruction from the user or decision owner;
-2. the latest approved SOUL and `goal.md`;
+2. the user-supplied SOUL and `goal.md`;
 3. the bundled templates;
 4. the plan under review.
 
@@ -80,7 +92,7 @@ Label every important statement:
 
 If a live document is inaccessible, ask for an export or pasted text. Continue with available material, lower confidence, and keep missing content as `GAP`.
 
-Do not silently carry a current rule backward into an older plan. Record SOUL revision and `goal.md` effective period/revision before judging a historical plan.
+Do not silently carry a current rule backward into an older plan. Record the user-supplied SOUL revision and `goal.md` effective period/revision before judging a historical plan.
 
 ### Step 2: Collect evidence packs, then classify
 
@@ -102,7 +114,7 @@ For a portfolio or cross-circle review, collect a fourth **boundary pack** conta
 
 Read [references/baseline-intake.md](references/baseline-intake.md). Ask no more than six first-round questions to each owner. Do not send the full question bank.
 
-After receiving both packs, the Agent must:
+After receiving all applicable packs, the Agent must:
 
 1. reconcile definitions, periods, and sources;
 2. classify business type, stage, primary constraint, Ansoff quadrant, and growth curve;
